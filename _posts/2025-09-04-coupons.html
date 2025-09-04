@@ -1,0 +1,158 @@
+layout: post
+title: "折扣碼懶人包｜一鍵複製＋跳轉"
+date: 2025-09-04 13:00:00 +0800
+# 如用 Minimal Mistakes，改成 layout: single ＆可加 classes: wide
+# 如用 Minima，保留 layout: post 即可
+permalink: /coupons/
+---
+
+<!-- 說明：
+1) 將本檔放到 _posts/（檔名需含日期），或放 _pages/ 自訂 permalink。
+2) 卡片整張可點：會先【複製折扣碼】再【跳轉】到連結。
+3) 直接複製下方 <section class="coupon-grid"> ... </section> 以新增更多卡片。
+4) 將 data-code 與 href 換成你的真實代碼與賣場/領券網址。
+-->
+
+<style>
+  /* —— 基礎排版 —— */
+  .coupon-wrap {max-width: 1100px;margin: 0 auto;padding: 1rem 0 2rem;}
+  .coupon-head {display:flex;align-items:baseline;gap:.75rem;margin:.25rem 0 1rem}
+  .coupon-head h1 {font-size: clamp(1.25rem, 2.2vw, 1.8rem);margin:0}
+  .coupon-head .hint {opacity:.8;font-size:.95rem}
+
+  /* —— 網格 —— */
+  .coupon-grid {display:grid;grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));gap:14px;margin: .75rem 0 1.25rem}
+
+  /* —— 卡片 —— */
+  .coupon-card {position:relative;display:block;border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:16px;text-decoration:none;transition: transform .12s ease, box-shadow .12s ease;background:linear-gradient(180deg, #ffffff, #fafafa);}
+  .coupon-card:focus-visible {outline: 3px solid #9ad0ff;outline-offset: 2px}
+  .coupon-card:hover {transform: translateY(-2px);box-shadow: 0 6px 20px rgba(0,0,0,.08)}
+
+  .badge {display:inline-flex;align-items:center;gap:.4ch;font-weight:700;border-radius:999px;padding:.35rem .7rem;font-size:.9rem;background:#f4f7ff;border:1px dashed #c9d7ff}
+  .badge .off {font-variant-numeric: tabular-nums}
+
+  .code {margin:.6rem 0 .25rem;font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-size:1.05rem;letter-spacing:.4px}
+  .meta {opacity:.7;font-size:.9rem}
+  .cta {margin-top:.8rem;font-weight:600}
+
+  /* —— 浮動提示 —— */
+  .toast {position: fixed;left: 50%;bottom: 24px;transform: translateX(-50%) translateY(20px);background:#111;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.18);opacity:0;pointer-events:none;transition: opacity .18s ease, transform .18s ease;font-size:.95rem;z-index:9999}
+  .toast.show {opacity:1;transform: translateX(-50%) translateY(0)}
+
+  /* —— 小工具列（可選） —— */
+  .toolbar {display:flex;gap:8px;flex-wrap:wrap;margin: .5rem 0 1rem}
+  .toolbar .chip {border:1px solid rgba(0,0,0,.08);border-radius:999px;padding:.4rem .7rem;font-size:.9rem;background:#fff}
+</style>
+
+<div class="coupon-wrap" role="region" aria-label="折扣碼懶人包">
+  <div class="coupon-head">
+    <h1>折扣碼懶人包</h1>
+    <div class="hint">點卡片即可「複製折扣碼」＋「跳轉賣場/領券」</div>
+  </div>
+
+  <!--（可選）篩選小工具列：要就保留，不要就刪掉 -->
+  <div class="toolbar" aria-label="快速標籤">
+    <span class="chip">全站</span>
+    <span class="chip">商城</span>
+    <span class="chip">社群賣家</span>
+    <span class="chip">美妝</span>
+    <span class="chip">家電</span>
+  </div>
+
+  <section class="coupon-grid">
+    <!-- 範例卡 1：全站 299-30 -->
+    <a class="coupon-card" href="https://s.shopee.tw/EXAMPLE_299_30" data-code="Z29930" aria-label="複製折扣碼 Z29930 並前往賣場">
+      <div class="badge"><span>全站</span><span class="off">299‑30</span></div>
+      <div class="code">代碼：<strong>Z29930</strong></div>
+      <div class="meta">全站下單滿 299 折 30｜今日有效</div>
+      <div class="cta">點我複製＋前往</div>
+    </a>
+
+    <!-- 範例卡 2：$100-20 -->
+    <a class="coupon-card" href="https://s.shopee.tw/EXAMPLE_100_20" data-code="S10020" aria-label="複製折扣碼 S10020 並前往賣場">
+      <div class="badge"><span>全站</span><span class="off">$100‑20</span></div>
+      <div class="code">代碼：<strong>S10020</strong></div>
+      <div class="meta">指定品適用｜可疊會員回饋</div>
+      <div class="cta">點我複製＋前往</div>
+    </a>
+
+    <!-- 範例卡 3：商城 1800-800（示意） -->
+    <a class="coupon-card" href="https://s.shopee.tw/EXAMPLE_1800_800" data-code="M1800800" aria-label="複製折扣碼 M1800800 並前往賣場">
+      <div class="badge"><span>商城</span><span class="off">1800‑800</span></div>
+      <div class="code">代碼：<strong>M1800800</strong></div>
+      <div class="meta">商城限定｜整點限量（示意）</div>
+      <div class="cta">點我複製＋前往</div>
+    </a>
+
+    <!-- 範例卡 4：超商取貨 299-30 -->
+    <a class="coupon-card" href="https://s.shopee.tw/EXAMPLE_CVS_299_30" data-code="CVS29930" aria-label="複製折扣碼 CVS29930 並前往賣場">
+      <div class="badge"><span>超取</span><span class="off">299‑30</span></div>
+      <div class="code">代碼：<strong>CVS29930</strong></div>
+      <div class="meta">超商取貨適用｜可與免運券並用</div>
+      <div class="cta">點我複製＋前往</div>
+    </a>
+
+    <!-- 範例卡 5：社群賣家 999-100 -->
+    <a class="coupon-card" href="https://s.shopee.tw/EXAMPLE_SOC_999_100" data-code="SOC999100" aria-label="複製折扣碼 SOC999100 並前往賣場">
+      <div class="badge"><span>社群賣家</span><span class="off">999‑100</span></div>
+      <div class="code">代碼：<strong>SOC999100</strong></div>
+      <div class="meta">社群賣家專用券｜低消 999</div>
+      <div class="cta">點我複製＋前往</div>
+    </a>
+  </section>
+
+  <details>
+    <summary>使用說明／小提醒（可刪）</summary>
+    <ul>
+      <li>點任何卡片 → 會先複製卡片上的「代碼」到剪貼簿 → 0.4 秒後自動開新分頁到賣場或領券頁。</li>
+      <li>若你的主題會把外站連結自動加上 <code>noopener</code>/<code>nofollow</code>，可保留，安全性較高。</li>
+      <li>若連結是聯盟行銷／短網址，直接把卡片的 <code>href</code> 換成你的專屬連結即可。</li>
+      <li>想改為「同分頁開啟」：把下面 JS 的 <code>window.open(url, '_blank')</code> 改成 <code>window.location.href = url</code>。</li>
+    </ul>
+  </details>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true">已複製</div>
+
+<script>
+(function(){
+  const toast = document.getElementById('toast');
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=> toast.classList.remove('show'), 1600);
+  }
+
+  async function copyText(text){
+    try {
+      if (navigator.clipboard && window.isSecureContext){
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch(e){}
+    // 後備：建立暫存 textarea
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position='fixed'; ta.style.left='-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove(); return ok;
+  }
+
+  // 事件委派：整張卡片可點
+  document.addEventListener('click', async (e)=>{
+    const card = e.target.closest('.coupon-card');
+    if(!card) return;
+    e.preventDefault();
+    const code = card.getAttribute('data-code');
+    const url  = card.getAttribute('href');
+    if(!url){ return; }
+
+    const ok = await copyText(code || '');
+    showToast(ok ? `已複製：${code || '（無代碼）'}` : '複製失敗，已直接前往');
+    // 稍等 0.4 秒給使用者回饋，再開啟連結
+    setTimeout(()=>{ window.open(url, '_blank', 'noopener'); }, 400);
+  });
+})();
+</script>
